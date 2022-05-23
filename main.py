@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
+from time import sleep
 
 load_dotenv(find_dotenv())
 
@@ -76,6 +77,7 @@ def fetch_highlights(web, book):
     print("Loading took too much time!")
 
   loaded_book.click()
+  sleep(5)
 
   # try:
   #   loaded_highlights = WebDriverWait(web, delay).until(EC.text_to_be_present_in_element(highlights))
@@ -88,12 +90,13 @@ def fetch_highlights(web, book):
   # print(loaded_highlights, len(loaded_highlights))
 
   try:
-    WebDriverWait(web, delay).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#kp-notebook-annotations")))
+    WebDriverWait(web, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#kp-notebook-annotations")))
   except TimeoutError:
     print("Loading took too much time!")
 
-  highlights = web.find_elements(By.ID, "highlight")
+  sleep(5)
 
+  highlights = web.find_elements(By.ID, "highlight")
   print(highlights, "\nNo. of highlights: ", len(highlights))
 
   # return [high.text() for high in highlights]
