@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from getpass import getpass
@@ -50,16 +52,20 @@ def fetch_books(web):
 
   Returns:
     A dict of {"book_names": [], "books": [<a nodes>]}
+    A list of [<h2 nodes>]
   """
 
-  book_names_nodes = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
-  book_names = [book.text.strip() for book in book_names_nodes]
-  books = web.find_elements(By.CSS_SELECTOR, "a.a-link-normal.a-text-normal")[:-3]
+  # book_names_nodes = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
+  # book_names = [book.text.strip() for book in book_names_nodes]
+  # books = web.find_elements(By.CSS_SELECTOR, "a.a-link-normal.a-text-normal")[:-3]
 
-  print(f"No. of boooks: {len(books)}")
+  # print(f"No. of boooks: {len(books)}")
 
-  assert len(books) == len(book_names), "books and book_names not equal!"
-  return (book_names, books)
+  # assert len(books) == len(book_names), "books and book_names not equal!"
+  # return (book_names, books)
+
+  books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
+  return books
 
 def fetch_highlights(web, book):
   """
@@ -72,9 +78,10 @@ def fetch_highlights(web, book):
   Returns:
     A list of highlights: [highlight1, highlight2, ...]
   """
-  book.click()
+  WebDriverWait(web, 100).until(EC.element_to_be_clickable(By.CSS_SELECTOR, "h2.kp-notebook-searchable")).click()
+  # book.click()
   highlights = web.find_elements(By.ID, "highlight")
-  print(highlights[0].text)
+  print(highlights)
   # return [high.text() for high in highlights]
 
 def main():
@@ -82,7 +89,8 @@ def main():
   browser.get("https://read.amazon.com/kp/notebook")
 
   login(browser)
-  book_names, books = fetch_books(browser)
+  # book_names, books = fetch_books(browser)
+  books = fetch_books(browser)
 
   book_highlights = {}
 
