@@ -16,6 +16,7 @@ def user_auth():
   Returns:
     A tuple: (email, password)  
   """
+
   email = os.environ.get("EMAIL") or input("Enter Amazon Email: ")
   password = os.environ.get("PASSWORD") or getpass("Password: ")
 
@@ -26,8 +27,9 @@ def login(web):
   Automates the login process
 
   Args:
-    web: browser session data type
+    web: browser data type
   """
+
   user_login = user_auth()
 
   email = web.find_element(By.ID, "ap_email")
@@ -45,13 +47,19 @@ def fetch_books(web):
 
   Args:
     web: browser
-  """
-  books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
 
-  # book_names = [book.text.strip() for book in books]
+  Returns:
+    A dict of {"book_names": [], "books": [<a nodes>]}
+  """
+
+  book_names_nodes = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
+  book_names = [book.text.strip() for book in book_names_nodes]
+  books = web.find_elements(By.CSS_SELECTOR, "a.a-link-normal.a-text-normal")[:-3]
+
   print(f"No. of boooks: {len(books)}")
 
-  return books
+  assert len(books) == len(book_names), "books and book_names not equal!"
+  return (book_names, books)
 
 def fetch_highlights(web, book):
   """
@@ -64,14 +72,25 @@ def fetch_highlights(web, book):
   Returns:
     A list of highlights: [highlight1, highlight2, ...]
   """
-  pass
+  book.click()
+  highlights = web.find_elements(By.ID, "highlight")
+  print(highlights[0].text)
+  # return [high.text() for high in highlights]
 
 def main():
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
 
   login(browser)
-  fetch_books(browser)
+  book_names, books = fetch_books(browser)
+
+  book_highlights = {}
+
+  for book in books:
+    fetch_highlights(browser, book)
+    # book_highlights[book_names] = fetch_highlights(browser, book)
+
+  # print(book_highlights)
 
 
 if __name__ == "__main__":
