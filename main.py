@@ -71,35 +71,23 @@ def fetch_highlights(web, book):
   delay = 100
 
   try:
-    # el = WebDriverWait(web, delay).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "h2.kp-notebook-searchable")))
     loaded_book = WebDriverWait(web, delay).until(EC.element_to_be_clickable(book))
   except TimeoutError:
-    print("Loading took too much time!")
+    print("Loading books took too much time to be clickable!")
 
   loaded_book.click()
-  sleep(5)
-
-  # try:
-  #   loaded_highlights = WebDriverWait(web, delay).until(EC.text_to_be_present_in_element(highlights))
-  # except TimeoutError:
-  #   print("Loading took too much time!")
-  # except:
-  #   print("Err: Something went wrong!") 
-  #   exit()
-
-  # print(loaded_highlights, len(loaded_highlights))
 
   try:
     WebDriverWait(web, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#kp-notebook-annotations")))
   except TimeoutError:
-    print("Loading took too much time!")
+    print("Loading notebook-annotations took too much time!")
 
-  sleep(5)
-
+  # Subject to change!
+  sleep(10)
   highlights = web.find_elements(By.ID, "highlight")
-  print(highlights, "\nNo. of highlights: ", len(highlights))
+  # print(highlights, "\nNo. of highlights: ", len(highlights))
 
-  # return [high.text() for high in highlights]
+  return [high.text.strip() for high in highlights]
 
 def main():
   browser = webdriver.Firefox()
@@ -112,13 +100,14 @@ def main():
   book_highlights = {}
 
   # Testing
-  fetch_highlights(browser, books[0])
+  # test1 = fetch_highlights(browser, books[0])
+  # print(test1,"\nNo. of highlights: ", len(test1) )
 
-  # for book in books:
-  #   fetch_highlights(browser, book)
-    # book_highlights[book_names] = fetch_highlights(browser, book)
+  for book in books:
+    # fetch_highlights(browser, book)
+    book_highlights[book.text.strip()] = fetch_highlights(browser, book)
 
-  # print(book_highlights)
+  print(book_highlights)
 
 
 if __name__ == "__main__":
