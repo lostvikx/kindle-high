@@ -22,11 +22,19 @@ def login(web):
   sign_in_btn = web.find_element(By.ID, "signInSubmit")
   sign_in_btn.click()
 
+def fetch_books(web):
+  books = web.find_element(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
+  for book in books:
+    print(book.text)
+
+
 def main():
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
 
   login(browser)
+  fetch_books(browser)
+
 
 if __name__ == "__main__":
   main()
