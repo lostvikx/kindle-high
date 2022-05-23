@@ -87,27 +87,33 @@ def fetch_highlights(web, book):
   highlights = web.find_elements(By.ID, "highlight")
   # print(highlights, "\nNo. of highlights: ", len(highlights))
 
-  return [high.text.strip() for high in highlights]
+  annotations = []
+  for high in highlights:
+    high_text = high.text.strip()
+    if len(high_text.split()) > 3:
+      annotations.append(high_text)
+
+  return annotations
+
+  # return [high.text.strip() for high in highlights]
 
 def main():
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
 
   login(browser)
-  # book_names, books = fetch_books(browser)
   books = fetch_books(browser)
 
   book_highlights = {}
 
   # Testing
-  # test1 = fetch_highlights(browser, books[0])
-  # print(test1,"\nNo. of highlights: ", len(test1) )
+  test1 = fetch_highlights(browser, books[0])
+  print(test1,"\nNo. of highlights: ", len(test1))
 
-  for book in books:
-    # fetch_highlights(browser, book)
-    book_highlights[book.text.strip()] = fetch_highlights(browser, book)
+  # for book in books:
+  #   book_highlights[book.text.strip()] = fetch_highlights(browser, book)
 
-  print(book_highlights)
+  # print(book_highlights)
 
 
 if __name__ == "__main__":
