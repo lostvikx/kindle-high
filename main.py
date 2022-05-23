@@ -10,12 +10,24 @@ import os
 load_dotenv(find_dotenv())
 
 def user_auth():
+  """
+  Either gets the email id and password from .env file or prompts input
+
+  Returns:
+    A tuple: (email, password)  
+  """
   email = os.environ.get("EMAIL") or input("Enter Amazon Email: ")
   password = os.environ.get("PASSWORD") or getpass("Password: ")
 
   return (email, password)
 
 def login(web):
+  """
+  Automates the login process
+
+  Args:
+    web: browser session data type
+  """
   user_login = user_auth()
 
   email = web.find_element(By.ID, "ap_email")
@@ -28,13 +40,31 @@ def login(web):
   sign_in_btn.click()
 
 def fetch_books(web):
+  """
+  Fetches all the books: h2 tags
+
+  Args:
+    web: browser
+  """
   books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
-  for book in books:
 
-    print(book, book.text.strip())
-
+  # book_names = [book.text.strip() for book in books]
   print(f"No. of boooks: {len(books)}")
 
+  return books
+
+def fetch_highlights(web, book):
+  """
+  Fetches all the highlights from a given book
+
+  Args:
+    web: browser
+    book: book element
+  
+  Returns:
+    A list of highlights: [highlight1, highlight2, ...]
+  """
+  pass
 
 def main():
   browser = webdriver.Firefox()
