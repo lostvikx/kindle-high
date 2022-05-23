@@ -4,10 +4,15 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from getpass import getpass
+from dotenv import load_dotenv, find_dotenv
+import os
+
+load_dotenv(find_dotenv())
 
 def user_auth():
-  email = input("Enter Amazon Email: ")
-  password = getpass("Password: ")
+  email = os.environ.get("EMAIL") or input("Enter Amazon Email: ")
+  password = os.environ.get("PASSWORD") or getpass("Password: ")
+
   return (email, password)
 
 def login(web):
@@ -23,9 +28,12 @@ def login(web):
   sign_in_btn.click()
 
 def fetch_books(web):
-  books = web.find_element(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
+  books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
   for book in books:
-    print(book.text)
+
+    print(book, book.text.strip())
+
+  print(f"No. of boooks: {len(books)}")
 
 
 def main():
