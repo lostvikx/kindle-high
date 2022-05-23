@@ -51,19 +51,8 @@ def fetch_books(web):
     web: browser
 
   Returns:
-    A dict of {"book_names": [], "books": [<a nodes>]}
     A list of [<h2 nodes>]
   """
-
-  # book_names_nodes = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
-  # book_names = [book.text.strip() for book in book_names_nodes]
-  # books = web.find_elements(By.CSS_SELECTOR, "a.a-link-normal.a-text-normal")[:-3]
-
-  # print(f"No. of boooks: {len(books)}")
-
-  # assert len(books) == len(book_names), "books and book_names not equal!"
-  # return (book_names, books)
-
   books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
   return books
 
@@ -78,10 +67,35 @@ def fetch_highlights(web, book):
   Returns:
     A list of highlights: [highlight1, highlight2, ...]
   """
-  WebDriverWait(web, 100).until(EC.element_to_be_clickable(By.CSS_SELECTOR, "h2.kp-notebook-searchable")).click()
-  # book.click()
+  delay = 100
+
+  try:
+    # el = WebDriverWait(web, delay).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "h2.kp-notebook-searchable")))
+    loaded_book = WebDriverWait(web, delay).until(EC.element_to_be_clickable(book))
+  except TimeoutError:
+    print("Loading took too much time!")
+
+  loaded_book.click()
+
+  # try:
+  #   loaded_highlights = WebDriverWait(web, delay).until(EC.text_to_be_present_in_element(highlights))
+  # except TimeoutError:
+  #   print("Loading took too much time!")
+  # except:
+  #   print("Err: Something went wrong!") 
+  #   exit()
+
+  # print(loaded_highlights, len(loaded_highlights))
+
+  try:
+    WebDriverWait(web, delay).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "#kp-notebook-annotations")))
+  except TimeoutError:
+    print("Loading took too much time!")
+
   highlights = web.find_elements(By.ID, "highlight")
-  print(highlights)
+
+  print(highlights, "\nNo. of highlights: ", len(highlights))
+
   # return [high.text() for high in highlights]
 
 def main():
@@ -94,8 +108,11 @@ def main():
 
   book_highlights = {}
 
-  for book in books:
-    fetch_highlights(browser, book)
+  # Testing
+  fetch_highlights(browser, books[0])
+
+  # for book in books:
+  #   fetch_highlights(browser, book)
     # book_highlights[book_names] = fetch_highlights(browser, book)
 
   # print(book_highlights)
