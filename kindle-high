@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-echo "hello world"
+# project dir
+path=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
+# echo $path
+
+# Calling prompt.py
+cd $path
+python3 "prompt.py"
+

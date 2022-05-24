@@ -9,7 +9,6 @@ from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
 import json
-import subprocess
 
 load_dotenv(find_dotenv())
 
@@ -168,7 +167,11 @@ def main():
   browser.close()
 
 if __name__ == "__main__":
-  if not os.path.exists("highlights.json"):
-    main()
-  else:
-    print("highlights.json already exists!")
+  # if not os.path.exists("highlights.json"):
+  #   main()
+  # else:
+  #   print("highlights.json already exists!")
+
+  print("Fetching data")
+
+  # main()
