@@ -8,6 +8,8 @@ from selenium.webdriver.common.by import By
 from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
+import json
+import subprocess
 
 load_dotenv(find_dotenv())
 
@@ -105,6 +107,22 @@ def fetch_highlights(web, book, first):
 
   return annotations
 
+
+def unit_test():
+  browser = webdriver.Firefox()
+  browser.get("https://read.amazon.com/kp/notebook")
+
+  login(browser)
+  books = fetch_books(browser)
+  # print(books)
+
+  test0 = fetch_highlights(browser, books[0], True)
+  print(test0,"\nNo. of highlights: ", len(test0)) # 192
+
+  test1 = fetch_highlights(browser, books[1], False)
+  print(test1,"\nNo. of highlights: ", len(test1)) # 60
+
+
 def main():
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
@@ -115,13 +133,6 @@ def main():
 
   book_highlights = {}
 
-  # Testing
-  # test0 = fetch_highlights(browser, books[0], True)
-  # print(test0,"\nNo. of highlights: ", len(test0)) # 192
-
-  # test1 = fetch_highlights(browser, books[1], False)
-  # print(test1,"\nNo. of highlights: ", len(test1)) # 60
-
   for index, book in enumerate(books):
     is_first = False
     if index == 0:
@@ -129,8 +140,17 @@ def main():
     
     book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
 
-  print(book_highlights)
+  # print(book_highlights)
+
+  highlights_save_file_name = "highlights.json"
+
+  with open(highlights_save_file_name, "w", encoding="utf-8") as f:
+    json.dump(book_highlights, f, ensure_ascii=False, indent=2)
+
+  save_file_path = os.path.join(__file__, highlights_save_file_name)
+  print(f"Highlights Saved: {save_file_path}")
 
 
 if __name__ == "__main__":
   main()
+  # subprocess.run(["cp", "highlights.json", "backup.json"])
