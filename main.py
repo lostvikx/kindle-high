@@ -150,7 +150,14 @@ def main():
   save_file_path = os.path.join(__file__, highlights_save_file_name)
   print(f"Highlights Saved: {save_file_path}")
 
+  if not os.path.exists("backup.json"):
+    subprocess.run(["cp", "highlights.json", "backup.json"])
+    
+  # subprocess.run(["./quote"])
+
 
 if __name__ == "__main__":
-  main()
-  # subprocess.run(["cp", "highlights.json", "backup.json"])
+  if not os.path.exists("highlights.json"):
+    main()
+  else:
+    print("highlights.json already exists!")
