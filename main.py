@@ -122,6 +122,24 @@ def unit_test():
   test1 = fetch_highlights(browser, books[1], False)
   print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
+def save_as_json(book_highlights):
+  """
+  Saves book_highlights to a json file
+
+  Args:
+    book_highlights: { book_name: [highlights] }
+  """
+  highlights_save_file_name = "highlights.json"
+
+  with open(highlights_save_file_name, "w", encoding="utf-8") as f:
+    json.dump(book_highlights, f, ensure_ascii=False, indent=2)
+
+  save_file_path = os.path.join(__file__, highlights_save_file_name)
+  print(f"Highlights Saved: {save_file_path}")
+
+  if not os.path.exists("backup.json"):
+    subprocess.run(["cp", highlights_save_file_name, "backup.json"])
+
 
 def main():
   browser = webdriver.Firefox()
@@ -137,24 +155,16 @@ def main():
     is_first = False
     if index == 0:
       is_first = True
-    
-    book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
+
+    highs = fetch_highlights(browser, book, is_first)
+
+    if highs:
+      book_highlights[book.text.strip()] = highs
 
   # print(book_highlights)
-
-  highlights_save_file_name = "highlights.json"
-
-  with open(highlights_save_file_name, "w", encoding="utf-8") as f:
-    json.dump(book_highlights, f, ensure_ascii=False, indent=2)
-
-  save_file_path = os.path.join(__file__, highlights_save_file_name)
-  print(f"Highlights Saved: {save_file_path}")
-
-  if not os.path.exists("backup.json"):
-    subprocess.run(["cp", "highlights.json", "backup.json"])
-    
+  save_as_json(book_highlights)
   # subprocess.run(["./quote"])
-
+  browser.close()
 
 if __name__ == "__main__":
   if not os.path.exists("highlights.json"):
