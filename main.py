@@ -59,7 +59,7 @@ def fetch_books(web):
 
 def fetch_highlights(web, book, first):
   """
-  Fetches all the highlights from a given book
+  Fetches all the highlights from a given book. First clicks on the book, then waits for the notebook-annotations div to be present in the DOM, then wait for the Ajax request.
 
   Args:
     web: browser
@@ -83,17 +83,23 @@ def fetch_highlights(web, book, first):
     print("Loading notebook-annotations took too much time!")
 
   # Subject to change!
-  sleep(10)
-  highlights = web.find_elements(By.ID, "highlight")
-  # print(highlights, "\nNo. of highlights: ", len(highlights))
+  # sleep(10)
+  # highlights = web.find_elements(By.ID, "highlight")
 
-  annotations = []
-  for high in highlights:
-    high_text = high.text.strip()
-    if len(high_text.split()) > 3:
-      annotations.append(high_text)
+  try:
+    highlights = WebDriverWait(web, delay).until(lambda doc: doc.find_elements(By.ID, "highlight"))
+  except TimeoutError:
+    print("Loading highlights took too much time!")
 
-  return annotations
+  print(highlights, "\nNo. of highlights: ", len(highlights))
+
+  # annotations = []
+  # for high in highlights:
+  #   high_text = high.text.strip()
+  #   if len(high_text.split()) > 3:
+  #     annotations.append(high_text)
+
+  # return annotations
 
   # return [high.text.strip() for high in highlights]
 
@@ -108,20 +114,20 @@ def main():
   book_highlights = {}
 
   # Testing
-  # test0 = fetch_highlights(browser, books[0], True)
+  test0 = fetch_highlights(browser, books[0], True)
   # print(test0,"\nNo. of highlights: ", len(test0)) # 192
 
   # test1 = fetch_highlights(browser, books[1], False)
   # print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
-  for index, book in enumerate(books):
-    is_first = False
-    if index == 0:
-      is_first = True
+  # for index, book in enumerate(books):
+  #   is_first = False
+  #   if index == 0:
+  #     is_first = True
     
-    book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
+  #   book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
 
-  print(book_highlights)
+  # print(book_highlights)
 
 
 if __name__ == "__main__":
