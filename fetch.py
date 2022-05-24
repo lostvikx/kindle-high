@@ -83,8 +83,7 @@ def fetch_highlights(web, book, first):
   except TimeoutError:
     print("Loading notebook-annotations took too much time!")
 
-  # Subject to change! {I think I have fixed it.} Wait for AJAX requests to complete
-  # sleep(10)
+  # Wait for AJAX requests to complete
   wait = WebDriverWait(web, delay)
 
   try:
@@ -102,6 +101,7 @@ def fetch_highlights(web, book, first):
   annotations = []
   for high in highlights:
     high_text = high.text.strip()
+    # Atleast 4 words in high_text
     if len(high_text.split()) > 3:
       annotations.append(high_text)
 
@@ -137,8 +137,9 @@ def save_as_json(book_highlights):
   save_file_path = os.path.join(__file__, highlights_save_file_name)
   print(f"Highlights Saved: {save_file_path}")
 
-  if not os.path.exists("backup.json"):
-    subprocess.run(["cp", highlights_save_file_name, "backup.json"])
+  # save a backup (not required)
+  # if not os.path.exists("backup.json"):
+  #   subprocess.run(["cp", highlights_save_file_name, "backup.json"])
 
 
 def main():
@@ -147,7 +148,6 @@ def main():
 
   login(browser)
   books = fetch_books(browser)
-  # print(books)
 
   book_highlights = {}
 
@@ -156,6 +156,7 @@ def main():
     if index == 0:
       is_first = True
 
+    # [atleast 1 highlight in the list]
     highs = fetch_highlights(browser, book, is_first)
 
     if highs:
