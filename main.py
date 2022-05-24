@@ -82,26 +82,29 @@ def fetch_highlights(web, book, first):
   except TimeoutError:
     print("Loading notebook-annotations took too much time!")
 
-  # Subject to change!
+  # Subject to change! {I think I have fixed it.}
   # sleep(10)
-  # highlights = web.find_elements(By.ID, "highlight")
+  wait = WebDriverWait(web, delay)
 
   try:
-    highlights = WebDriverWait(web, delay).until(lambda doc: doc.find_elements(By.ID, "highlight"))
+
+    wait.until(lambda web: web.execute_script('return jQuery.active') == 0)
+    wait.until(lambda web: web.execute_script('return document.readyState') == 'complete')
+
   except TimeoutError:
     print("Loading highlights took too much time!")
 
-  print(highlights, "\nNo. of highlights: ", len(highlights))
+  highlights = web.find_elements(By.ID, "highlight")
 
-  # annotations = []
-  # for high in highlights:
-  #   high_text = high.text.strip()
-  #   if len(high_text.split()) > 3:
-  #     annotations.append(high_text)
+  # print(highlights, "\nNo. of highlights: ", len(highlights))
 
-  # return annotations
+  annotations = []
+  for high in highlights:
+    high_text = high.text.strip()
+    if len(high_text.split()) > 3:
+      annotations.append(high_text)
 
-  # return [high.text.strip() for high in highlights]
+  return annotations
 
 def main():
   browser = webdriver.Firefox()
@@ -115,10 +118,10 @@ def main():
 
   # Testing
   test0 = fetch_highlights(browser, books[0], True)
-  # print(test0,"\nNo. of highlights: ", len(test0)) # 192
+  print(test0,"\nNo. of highlights: ", len(test0)) # 192
 
-  # test1 = fetch_highlights(browser, books[1], False)
-  # print(test1,"\nNo. of highlights: ", len(test1)) # 60
+  test1 = fetch_highlights(browser, books[1], False)
+  print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
   # for index, book in enumerate(books):
   #   is_first = False
