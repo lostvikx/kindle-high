@@ -57,7 +57,7 @@ def fetch_books(web):
   books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
   return books
 
-def fetch_highlights(web, book):
+def fetch_highlights(web, book, first):
   """
   Fetches all the highlights from a given book
 
@@ -75,7 +75,7 @@ def fetch_highlights(web, book):
   except TimeoutError:
     print("Loading books took too much time to be clickable!")
 
-  loaded_book.click()
+  if not first: loaded_book.click()
 
   try:
     WebDriverWait(web, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#kp-notebook-annotations")))
@@ -103,17 +103,25 @@ def main():
 
   login(browser)
   books = fetch_books(browser)
+  # print(books)
 
   book_highlights = {}
 
   # Testing
-  test1 = fetch_highlights(browser, books[0])
-  print(test1,"\nNo. of highlights: ", len(test1))
+  # test0 = fetch_highlights(browser, books[0], True)
+  # print(test0,"\nNo. of highlights: ", len(test0)) # 192
 
-  # for book in books:
-  #   book_highlights[book.text.strip()] = fetch_highlights(browser, book)
+  # test1 = fetch_highlights(browser, books[1], False)
+  # print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
-  # print(book_highlights)
+  for index, book in enumerate(books):
+    is_first = False
+    if index == 0:
+      is_first = True
+    
+    book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
+
+  print(book_highlights)
 
 
 if __name__ == "__main__":
