@@ -3,12 +3,12 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
-from time import sleep
+# from time import sleep
 
 load_dotenv(find_dotenv())
 
@@ -117,20 +117,20 @@ def main():
   book_highlights = {}
 
   # Testing
-  test0 = fetch_highlights(browser, books[0], True)
-  print(test0,"\nNo. of highlights: ", len(test0)) # 192
+  # test0 = fetch_highlights(browser, books[0], True)
+  # print(test0,"\nNo. of highlights: ", len(test0)) # 192
 
-  test1 = fetch_highlights(browser, books[1], False)
-  print(test1,"\nNo. of highlights: ", len(test1)) # 60
+  # test1 = fetch_highlights(browser, books[1], False)
+  # print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
-  # for index, book in enumerate(books):
-  #   is_first = False
-  #   if index == 0:
-  #     is_first = True
+  for index, book in enumerate(books):
+    is_first = False
+    if index == 0:
+      is_first = True
     
-  #   book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
+    book_highlights[book.text.strip()] = fetch_highlights(browser, book, is_first)
 
-  # print(book_highlights)
+  print(book_highlights)
 
 
 if __name__ == "__main__":
