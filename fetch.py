@@ -121,6 +121,7 @@ def unit_test():
   test1 = fetch_highlights(browser, books[1], False)
   print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
+
 def save_as_json(book_highlights):
   """
   Saves book_highlights to a json file
@@ -135,10 +136,6 @@ def save_as_json(book_highlights):
 
   save_file_path = os.path.join(__file__, highlights_save_file_name)
   print(f"Highlights Saved: {save_file_path}")
-
-  # save a backup (not required)
-  # if not os.path.exists("backup.json"):
-  #   subprocess.run(["cp", highlights_save_file_name, "backup.json"])
 
 
 def main():
@@ -163,15 +160,8 @@ def main():
 
   # print(book_highlights)
   save_as_json(book_highlights)
-  # subprocess.run(["./quote"])
   browser.close()
 
 if __name__ == "__main__":
-  # if not os.path.exists("highlights.json"):
-  #   main()
-  # else:
-  #   print("highlights.json already exists!")
-
-  print("Fetching data")
-
+  print("Fetching data...")
   # main()

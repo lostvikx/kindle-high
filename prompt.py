@@ -39,7 +39,7 @@ def main():
 
   if parse_args().update_highlights or needs_fetch:
     print("Updating highlights.json...")
-    subprocess.run(["python3", ""])
+    subprocess.run(["python3", "fetch.py"])
   else:
     print(annotation)
 

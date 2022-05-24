@@ -3,8 +3,11 @@
 # project dir
 path=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
 # echo $path
-
-# Calling prompt.py
 cd $path
-python3 "prompt.py"
 
+if [ ! -z $1 ]; then 
+  [[ $1 == "fetch" ]] && python3 "fetch.py" || echo "invalid command: try fetch"; exit 1;
+fi
+
+# Calling prompt
+python3 "prompt.py"
