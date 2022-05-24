@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
-# from time import sleep
 
 load_dotenv(find_dotenv())
 
@@ -82,7 +81,7 @@ def fetch_highlights(web, book, first):
   except TimeoutError:
     print("Loading notebook-annotations took too much time!")
 
-  # Subject to change! {I think I have fixed it.}
+  # Subject to change! {I think I have fixed it.} Wait for AJAX requests to complete
   # sleep(10)
   wait = WebDriverWait(web, delay)
 
