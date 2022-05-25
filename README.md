@@ -1,6 +1,6 @@
 # Kindle Highlights
 
-![showcase.gif](Showcase: How it works!)
+![/showcase.gif](Showcase: How it works!)
 
 Extracts all your Amazon Kindle highlights
 
