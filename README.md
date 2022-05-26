@@ -34,12 +34,13 @@ export PATH=$PATH:/home/whoami/path/to/cloned/dir
 
 ## Usage
 
+Prints a cool annotation from your kindle highlight. Also, it fetches the highlights if they aren't present locally.
+
 ```bash
-# Prints a cool annotation from your kindle highlight. Also, it fetches the highlights if they aren't present locally.
 kindle-high
 ```
 
-To update the local `highlights.json` file
+To update the local `highlights.json` file.
 
 ```bash
 kindle-high fetch
