@@ -9,7 +9,6 @@ from dotenv import load_dotenv, find_dotenv
 import os
 import json
 
-load_dotenv(find_dotenv())
 
 def user_auth():
   """
@@ -138,6 +137,11 @@ def save_as_json(book_highlights):
 
 
 def main():
+  load_dotenv(find_dotenv())
+
+  prog_dir = os.environ.get("KINDLE_HIGH")
+  os.chdir(prog_dir)
+
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
 

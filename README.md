@@ -10,9 +10,9 @@ Extracts all your Amazon Kindle highlights
 - [x] JSON Output
 - [x] Remove keys of empty lists
 - [x] Make executable
+- [x] Install geckodriver dependency instruction
 - [ ] Remove useless highlights on the kindle site
 - [ ] Highlights from a specific book (search algo or regex)
-- [x] Install geckodriver dependency instruction
 - [ ] prompt.py argparse is never used, provide bash man
 
 ## Setup

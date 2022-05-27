@@ -4,6 +4,9 @@ from argparse import ArgumentParser
 import json
 from random import choice
 import subprocess
+import os
+from dotenv import load_dotenv, find_dotenv
+
 
 def select_annotation(book_highlights)->str:
   """
@@ -38,8 +41,13 @@ def parse_args():
 
 
 def main():
+  load_dotenv(find_dotenv())
+
   highlights_save_file_name = "highlights.json"
   needs_fetch = False
+  
+  prog_dir = os.environ.get("KINDLE_HIGH")
+  os.chdir(prog_dir)
 
   try:
     with open(highlights_save_file_name, "r", encoding="utf-8") as f:
@@ -56,7 +64,10 @@ def main():
     print("Updating highlights.json...")
     subprocess.run(["python3", "fetch.py"])
   
-  print(annotation)
+  try:
+    print(annotation)
+  except Exception as err:
+    print(f"Couldn't print highlight: {err}")
 
 
 if __name__ == "__main__":

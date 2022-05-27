@@ -2,9 +2,10 @@
 
 # project dir
 path=$(realpath "$0" | sed 's|\(.*\)/.*|\1|')
-# echo $path
+echo $path
 cd $path
 
+# if one arg is provided
 if [ ! -z $1 ]; then 
   [[ $1 == "fetch" ]] && python3 "fetch.py" || echo "invalid command: try 'kindle-high fetch'"; exit 1;
 fi
