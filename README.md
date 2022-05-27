@@ -29,7 +29,7 @@ Selenium requires additional browser drivers. Download them from [here](https://
 Then, add this line at the end of your `.bashrc` file
 
 ```bash
-export PATH=$PATH:/home/whoami/path/to/cloned/dir
+export KINDLE_HIGH="/home/<your-name>/<path-to-directory>/kindle-high/"
 ```
 
 ## Usage
@@ -43,7 +43,15 @@ kindle-high
 To update the local `highlights.json` file.
 
 ```bash
-kindle-high fetch
+kindle-high -u
+# OR
+kindle-high --update-highlights
+```
+
+For further help.
+
+```bash
+kindle-high --help
 ```
 
 ### Bonus usage of ffmpeg (unrelated)
