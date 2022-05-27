@@ -72,7 +72,7 @@ def main():
   if parse_args().update_highlights or needs_fetch:
     print("Updating highlights.json...")
     try:
-      # subprocess.run(["python3", "fetch.py"])
+      subprocess.run(["python3", "fetch.py"])
       pass
     except Exception as err:
       print(f"Couldn't run fetch.py: {err}")

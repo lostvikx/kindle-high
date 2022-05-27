@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+cp print.py kindle-high
+chmod +x kindle-high
+mv kindle-high ~/.local/bin/
