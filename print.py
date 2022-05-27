@@ -8,6 +8,10 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 
+def parse_highlights(book_highlights):
+  pass
+
+
 def select_annotation(book_highlights)->str:
   """
   Select a random highlight
@@ -35,6 +39,8 @@ def parse_args():
   parser = ArgumentParser(description="Print a random annotation from your kindle highlights")
 
   parser.add_argument("-u", "--update-highlights", help="Update the annotations by running fetch.py", action="store_true")
+
+  # parser.add_argument("--book-name", help="get annotation from specific book", choices=())
 
   args = parser.parse_args()
   return args
