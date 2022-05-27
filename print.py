@@ -14,7 +14,7 @@ def select_annotation(book_highlights):
   return choice(all_annotations)
 
 def parse_args():
-  parser = ArgumentParser(description="Prompt a random highlight from Kindle annotations")
+  parser = ArgumentParser(description="Print a random annotation from your kindle highlights")
 
   parser.add_argument("-u", "--update-highlights", help="Update the annotations by running fetch.py", action="store_true")
 

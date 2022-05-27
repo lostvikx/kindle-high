@@ -9,5 +9,4 @@ if [ ! -z $1 ]; then
   [[ $1 == "fetch" ]] && python3 "fetch.py" || echo "invalid command: try 'kindle-high fetch'"; exit 1;
 fi
 
-# Calling prompt
-python3 "prompt.py"
+python3 "print.py"
