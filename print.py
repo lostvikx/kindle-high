@@ -30,23 +30,6 @@ def parse_highlights(book_highlights):
   return (all_annotations, book_names)
 
 
-# def select_annotation(book_highlights)->str:
-#   """
-#   Select a random highlight
-
-#   Args:
-#     book_highlights: { "book_name": [ ...highlights ] }
-
-#   Returns:
-#     Random annotation, a string, "highlight ~ book_name"
-#   """
-#   all_annotations = []
-#   for book_name, highlights in book_highlights.items():
-#     for high in highlights:
-#       all_annotations.append(f"{high} ~ {book_name}")
-
-#   return choice(all_annotations)
-
 def parse_args():
   """
   Helper fn: provides --help and --update-highlights flags.
@@ -70,13 +53,13 @@ def main():
   highlights_save_file_name = "highlights.json"
   needs_fetch = False
   
+  # Change directory
   prog_dir = os.environ.get("KINDLE_HIGH")
   os.chdir(prog_dir)
 
   try:
     with open(highlights_save_file_name, "r", encoding="utf-8") as f:
       data = json.load(f)
-      # annotation = select_annotation(book_highlights=data)
       all_annotations, book_names = parse_highlights(book_highlights=data)
 
   except FileNotFoundError:
@@ -88,11 +71,13 @@ def main():
 
   if parse_args().update_highlights or needs_fetch:
     print("Updating highlights.json...")
-    # try:
-    #   subprocess.run(["python3", "fetch.py"])
-    # except Exception as err:
-    #   print(f"Couldn't run fetch.py: {err}")
+    try:
+      # subprocess.run(["python3", "fetch.py"])
+      pass
+    except Exception as err:
+      print(f"Couldn't run fetch.py: {err}")
 
+  # Print annotation from a specific book 
   elif parse_args().book_name:
     book_name = parse_args().book_name
 
@@ -101,9 +86,32 @@ def main():
       if re.search(book_name, name, re.I):
         matches.append(name)
 
-    print(matches)
     if len(matches) == 1:
-      pass
+      book_title = matches[0]
+      annotation = choice(data[book_title])
+      print(f"{annotation} ~ {book_title}")
+
+    # Multiple matches
+    elif matches:
+      print(matches)
+      while True:
+        try:
+          select_book = int(input("Enter index of book: "))
+        except Exception:
+          print("Please enter a number!")
+          continue
+
+        try:
+          book_title = matches[select_book]
+          annotation = choice(data[book_title])
+          print(f"{annotation} ~ {book_title}")
+          break
+        except IndexError:
+          print("Please enter a valid index value!")
+          continue
+        except Exception as err:
+          print(f"Something went wrong: {err}")
+          break
 
   else:
     annotation = choice(all_annotations)
