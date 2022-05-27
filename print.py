@@ -5,7 +5,16 @@ import json
 from random import choice
 import subprocess
 
-def select_annotation(book_highlights):
+def select_annotation(book_highlights)->str:
+  """
+  Select a random highlight
+
+  Args:
+    book_highlights: { "book_name": [ ...highlights ] }
+
+  Returns:
+    Random annotation, a string, "highlight ~ book_name"
+  """
   all_annotations = []
   for book_name, highlights in book_highlights.items():
     for high in highlights:
@@ -14,6 +23,12 @@ def select_annotation(book_highlights):
   return choice(all_annotations)
 
 def parse_args():
+  """
+  Helper fn: provides --help and --update-highlights flags.
+
+  Returns:
+    args: object
+  """
   parser = ArgumentParser(description="Print a random annotation from your kindle highlights")
 
   parser.add_argument("-u", "--update-highlights", help="Update the annotations by running fetch.py", action="store_true")
