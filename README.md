@@ -1,6 +1,6 @@
 # Kindle Highlights
 
-![Showcase: How it works!](showcase.gif)
+![Showcase: How it works!](assets/showcase.gif)
 
 Extracts all your Amazon Kindle highlights
 
@@ -62,4 +62,11 @@ First use of ffmpeg program!
 ```bash
 # Converts a video file to a fast-forwarded gif
 ffmpeg -ss 1 -t 3 -i <video-file-name>.mp4 -vf "fps=10,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 showcase.gif
+```
+
+### How to create a virtual environment?
+
+```bash
+python -m venv venv
+. venv/bin/activate
 ```
