@@ -4,7 +4,7 @@
 
 Extracts all your Amazon Kindle highlights
 
-## ToDos
+## TODO
 
 - [x] Make the program more efficient
 - [x] JSON Output
@@ -13,6 +13,7 @@ Extracts all your Amazon Kindle highlights
 - [x] Install geckodriver dependency instruction
 - [x] prompt.py argparse is never used, provide bash man
 - [x] Highlights from a specific book (search algo or regex)
+- [ ] book search: multi-word search
 - [ ] Remove useless highlights on the kindle site
 - [ ] Add a setup script
 
@@ -64,9 +65,10 @@ First use of ffmpeg program!
 ffmpeg -ss 1 -t 3 -i <video-file-name>.mp4 -vf "fps=10,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 showcase.gif
 ```
 
-### How to create a virtual environment?
+### Create a virtual environment
 
 ```bash
 python -m venv venv
+# Activate virtual environment
 . venv/bin/activate
 ```
