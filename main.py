@@ -43,6 +43,8 @@ def parse_args():
 
   parser.add_argument("-b", "--book-name", help="get annotation from specific book")
 
+  parser.add_argument("-d", "--delete-highlights", help="deletes useless highlights on your kindle account", action="store_true")
+
   args = parser.parse_args()
   return args
 
@@ -57,6 +59,13 @@ def main():
   prog_dir = os.environ.get("KINDLE_HIGH")
   os.chdir(prog_dir)
 
+  if parse_args().delete_highlights:
+    try:
+      subprocess.run(["python3", "delete.py"])
+      pass
+    except Exception as err:
+      print(f"Couldn't run delete.py: {err}")
+
   try:
     with open(highlights_save_file_name, "r", encoding="utf-8") as f:
       data = json.load(f)
@@ -67,8 +76,9 @@ def main():
     needs_fetch = True
     pass
   except Exception as err:
-    print(f"Something went wrong: {err}")
+    print(f"Something went wrong while opening file: {err}")
 
+  # Needs update or fetch
   if parse_args().update_highlights or needs_fetch:
     print("Updating highlights.json...")
     try:
