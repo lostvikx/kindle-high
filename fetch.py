@@ -107,15 +107,16 @@ def fetch_highlights(web):
 
   # print(highlights, "\nNo. of highlights: ", len(highlights))
 
-  annotations = []
-  for high in highlights:
-    high_text = high.text.strip()
+  # annotations = []
+  # for high in highlights:
+  #   high_text = high.text.strip()
 
-    # Atleast 4 words in high_text
-    if len(high_text.split()) > 3:
-      annotations.append(high_text)
+  #   # Atleast 4 words in high_text
+  #   if len(high_text.split()) > 3:
+  #     annotations.append(high_text)
 
-  return annotations
+  return [high.text.strip() for high in highlights]
+  # return annotations
 
 
 def unit_test():
