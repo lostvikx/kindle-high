@@ -5,26 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
-import json
 from time import sleep
-
-
-def fetch_highlights_to_del(web):
-  
-  highlight_divs = web.find_elements(By.CSS_SELECTOR, ".a-row.a-spacing-base > .a-column.a-span10.kp-notebook-row-separator")
-
-  highlights_to_del = []
-
-  for div in highlight_divs:
-    highlight = div.find_element(By.ID, "highlight").text.strip()
-
-    if len(highlight.split()) <= 3:
-      highlights_to_del.append(div)
-
-  return highlights_to_del
 
 
 def fetch_highlight_to_del(web):
@@ -32,7 +15,12 @@ def fetch_highlight_to_del(web):
   highlight_divs = web.find_elements(By.CSS_SELECTOR, ".a-row.a-spacing-base > .a-column.a-span10.kp-notebook-row-separator")
 
   for high_div in highlight_divs:
-    highlight = high_div.find_element(By.ID, "highlight").text.strip()
+    try:
+      highlight = high_div.find_element(By.ID, "highlight").text.strip()
+    except Exception as err:
+      print(f"Text highlight error: {err}")
+      # remove text that has error
+      return high_div
     if len(highlight.split()) <= 3:
       return high_div
     else:
@@ -54,6 +42,7 @@ def wait_until_clickable(web, element, delay):
 
 
 def click_element(web, element):
+  web.execute_script("arguments[0].scrollIntoView(true);", element)
   webdriver.ActionChains(web).move_to_element(element).click(element).perform()
 
 
@@ -72,8 +61,8 @@ def delete_highlight(web, highlight_div):
   delete_confirm_btn_ready = wait_until_clickable(web, delete_confirm_btn, delay)
   click_element(web, delete_confirm_btn_ready)
 
-  # this is a quick fix
-  sleep(5)
+  # A quick fix.
+  sleep(3)
 
 
 def main():
@@ -96,29 +85,48 @@ def main():
       print("Login failed! Wrong email or password.")
       continue
 
-  # test
-  wait_payload(browser, books[26], False, 100)
+  # testing
+  def unit_test():
+    wait_payload(browser, books[26], False, 100)
 
-  while True:
-    high_div = fetch_highlight_to_del(browser)
+    while True:
+      high_div = fetch_highlight_to_del(browser)
 
-    if high_div != None:
-      delete_highlight(browser, high_div)
-      continue
-    else:
-      print("Everything looks good!")
-      break
+      if high_div != None:
+        delete_highlight(browser, high_div)
+        continue
+      else:
+        print("Everything looks good!")
+        break
+
+    browser.close()
+    print("Useless highlights were deleted!")
+
+  for index, book in enumerate(books):
+    is_first = False
+    if index == 0:
+      is_first = True
+
+    wait_payload(browser, book, is_first, 100)
+
+    while True:
+      high_div = fetch_highlight_to_del(browser)
+
+      if high_div != None:
+        try:
+          delete_highlight(browser, high_div)
+          continue
+        except Exception as err:
+          print("Couldn't delete a highlight!")
+          print(err)
+          exit()
+      else:
+        print("Everything looks good!")
+        break
 
   browser.close()
   print("Useless highlights were deleted!")
 
-  # for index, book in enumerate(books):
-  #   is_first = False
-  #   if index == 0:
-  #     is_first = True
-
-  #   wait_payload(browser, book, is_first, 100)
-  #   highs = fetch_highlights_to_del(browser)
 
 if __name__ == "__main__":
   main()
