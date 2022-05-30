@@ -56,7 +56,19 @@ def fetch_books(web):
   books = web.find_elements(By.CSS_SELECTOR, "h2.kp-notebook-searchable")
   return books
 
-def wait_payload(web, book, first, delay):
+def wait_payload(web, book, first:bool, delay:int)->None:
+  """
+  Clicks on the book, then waits for the notebook-annotations div to be present in the DOM, then wait for the Ajax request.
+
+  Args:
+    web: browser
+    book: book object
+    first: (boolean) is it the first book
+    delay: (int) seconds to wait for the payload
+  
+  Returns:
+    None
+  """
   try:
     loaded_book = WebDriverWait(web, delay).until(EC.element_to_be_clickable(book))
   except TimeoutError:
@@ -83,11 +95,10 @@ def wait_payload(web, book, first, delay):
 
 def fetch_highlights(web):
   """
-  Fetches all the highlights from a given book. First clicks on the book, then waits for the notebook-annotations div to be present in the DOM, then wait for the Ajax request.
+  Fetches all the highlights from a given book.
 
   Args:
     web: browser
-    book: book element
   
   Returns:
     A list of highlights: [highlight1, highlight2, ...]
@@ -99,7 +110,7 @@ def fetch_highlights(web):
   annotations = []
   for high in highlights:
     high_text = high.text.strip()
-    
+
     # Atleast 4 words in high_text
     if len(high_text.split()) > 3:
       annotations.append(high_text)
