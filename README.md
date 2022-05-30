@@ -13,7 +13,7 @@ Extracts all your Amazon Kindle highlights
 - [x] Install geckodriver dependency instruction
 - [x] prompt.py argparse is never used, provide bash man
 - [x] Highlights from a specific book (search algo or regex)
-- [ ] book search: multi-word search
+- [x] book search: multi-word search
 - [ ] Replace .json file with a database (sqlite3)
 - [ ] Remove useless highlights on the kindle site
 - [ ] Add a setup script

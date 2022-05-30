@@ -80,11 +80,14 @@ def main():
   # Print annotation from a specific book 
   elif parse_args().book_name:
     book_name = parse_args().book_name
+    search_terms = book_name.split()
 
     matches = []
     for name in book_names:
-      if re.search(book_name, name, re.I):
-        matches.append(name)
+      for term in search_terms:
+        if re.search(term, name, re.I):
+          if not name in matches:
+            matches.append(name)
 
     if len(matches) == 1:
       book_title = matches[0]
