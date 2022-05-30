@@ -9,6 +9,7 @@ from getpass import getpass
 from dotenv import load_dotenv, find_dotenv
 import os
 import json
+from time import sleep
 
 
 def fetch_highlights_to_del(web):
@@ -26,6 +27,20 @@ def fetch_highlights_to_del(web):
   return highlights_to_del
 
 
+def fetch_highlight_to_del(web):
+
+  highlight_divs = web.find_elements(By.CSS_SELECTOR, ".a-row.a-spacing-base > .a-column.a-span10.kp-notebook-row-separator")
+
+  for high_div in highlight_divs:
+    highlight = high_div.find_element(By.ID, "highlight").text.strip()
+    if len(highlight.split()) <= 3:
+      return high_div
+    else:
+      continue
+
+  return None
+
+
 def wait_until_clickable(web, element, delay):
   try:
     loaded_element = WebDriverWait(web, delay).until(EC.element_to_be_clickable(element))
@@ -38,23 +53,27 @@ def wait_until_clickable(web, element, delay):
   return complete_load
 
 
-def delete_highlights(web, highlight_divs):
+def click_element(web, element):
+  webdriver.ActionChains(web).move_to_element(element).click(element).perform()
 
+
+def delete_highlight(web, highlight_div):
   delay = 100
-  
-  for div in highlight_divs:
-    options_btn = div.find_element(By.CSS_SELECTOR, "a.a-popover-trigger.a-declarative")
-    options_btn_ready = wait_until_clickable(web, options_btn, delay)
-    webdriver.ActionChains(web).move_to_element(options_btn_ready).click(options_btn_ready).perform()
 
-    delete_btn = web.find_element(By.ID, "deletehighlight")
-    delete_btn_ready = wait_until_clickable(web, delete_btn, delay)
-    webdriver.ActionChains(web).move_to_element(delete_btn_ready).click(delete_btn_ready).perform()
+  options_btn = highlight_div.find_element(By.CSS_SELECTOR, "a.a-popover-trigger.a-declarative")
+  options_btn_ready = wait_until_clickable(web, options_btn, delay)
+  click_element(web, options_btn_ready)
 
-    delete_confirm_btn = web.find_element(By.ID, "deleteHighlight")
-    delete_confirm_btn_ready = wait_until_clickable(web, delete_confirm_btn, delay)
-    webdriver.ActionChains(web).move_to_element(delete_confirm_btn_ready).click(delete_confirm_btn_ready).perform()
-    # web.execute_script("arguments[0].click();", delete_it)
+  delete_btn = web.find_element(By.ID, "deletehighlight")
+  delete_btn_ready = wait_until_clickable(web, delete_btn, delay)
+  click_element(web, delete_btn_ready)
+
+  delete_confirm_btn = web.find_element(By.ID, "deleteHighlight")
+  delete_confirm_btn_ready = wait_until_clickable(web, delete_confirm_btn, delay)
+  click_element(web, delete_confirm_btn_ready)
+
+  # this is a quick fix
+  sleep(5)
 
 
 def main():
@@ -79,9 +98,16 @@ def main():
 
   # test
   wait_payload(browser, books[26], False, 100)
-  highlights_to_del = fetch_highlights_to_del(browser)
-  # browser.maximize_window()
-  delete_highlights(browser, highlights_to_del)
+
+  while True:
+    high_div = fetch_highlight_to_del(browser)
+
+    if high_div != None:
+      delete_highlight(browser, high_div)
+      continue
+    else:
+      print("Everything looks good!")
+      break
 
   browser.close()
   print("Useless highlights were deleted!")
@@ -91,7 +117,6 @@ def main():
   #   if index == 0:
   #     is_first = True
 
-  #   # [atleast 1 highlight in the list]
   #   wait_payload(browser, book, is_first, 100)
   #   highs = fetch_highlights_to_del(browser)
 
