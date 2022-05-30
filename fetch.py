@@ -120,7 +120,7 @@ def unit_test():
   print(test1,"\nNo. of highlights: ", len(test1)) # 60
 
 
-def save_as_json(book_highlights):
+def save_as_json(book_highlights, prog_dir):
   """
   Saves book_highlights to a json file
 
@@ -132,7 +132,7 @@ def save_as_json(book_highlights):
   with open(highlights_save_file_name, "w", encoding="utf-8") as f:
     json.dump(book_highlights, f, ensure_ascii=False, indent=2)
 
-  save_file_path = os.path.join(__file__, highlights_save_file_name)
+  save_file_path = os.path.join(prog_dir, highlights_save_file_name)
   print(f"Highlights Saved: {save_file_path}")
 
 
@@ -162,7 +162,7 @@ def main():
       book_highlights[book.text.strip()] = highs
 
   # print(book_highlights)
-  save_as_json(book_highlights)
+  save_as_json(book_highlights, prog_dir)
   browser.close()
 
 if __name__ == "__main__":
