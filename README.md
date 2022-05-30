@@ -16,24 +16,24 @@ Extracts all your Amazon Kindle highlights
 - [x] book search: multi-word search
 - [ ] Replace .json file with a database (sqlite3)
 - [ ] Remove useless highlights on the kindle site
-- [ ] Add a setup script
+- [x] Add a setup script
 
 ## Setup
 
 ```bash
 # Clone dir
 git clone https://github.com/lostvikx/kindle-high.git
-# Install dependencies
-pip install -r ./kindle-high/requirements.txt
+```
+
+Run the setup script.
+
+```bash
+cd kindle-high
+./setup
 ```
 
 Selenium requires additional browser drivers. Download them from [here](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/).
 
-Then, add this line at the end of your `.bashrc` file
-
-```bash
-export KINDLE_HIGH="/home/<your-name>/<path-to-directory>/kindle-high/"
-```
 
 ## Usage
 
