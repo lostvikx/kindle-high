@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Running..."
+
 main_path="$HOME/.local/share/kindle-high/"
 rm -rf $main_path
 mkdir $main_path
@@ -10,13 +12,16 @@ pip install -r requirements.txt
 # Select browser:
 
 # Edit .bashrc file
-# kindle_high_path=$(pwd)
-bashrc_path="$HOME/.bashrc"
-
-echo -e "\n\n# kindle_high" >> $bashrc_path
-echo "export KINDLE_HIGH=\"$main_path\"" >> $bashrc_path
+if [[ -z "${KINDLE_HIGH}" ]]; then
+  bashrc_path="$HOME/.bashrc"
+  echo -e "\n# kindle_high" >> $bashrc_path
+  echo "export KINDLE_HIGH=\"$main_path\"" >> $bashrc_path
+fi
 
 # Save an executable python script in the ~/.local/bin/ directory
 cp print.py kindle-high
 chmod +x kindle-high
 mv kindle-high ~/.local/bin/
+
+# Setup complete
+echo "Setup Complete!"

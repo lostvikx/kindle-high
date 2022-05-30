@@ -34,6 +34,7 @@ def login(web):
   user_login = user_auth()
 
   email = web.find_element(By.ID, "ap_email")
+  email.clear()
   email.send_keys(user_login[0])
 
   password = web.find_element(By.ID, "ap_password")
@@ -145,8 +146,16 @@ def main():
   browser = webdriver.Firefox()
   browser.get("https://read.amazon.com/kp/notebook")
 
-  login(browser)
-  books = fetch_books(browser)
+  # Wrong email or password
+  while True:
+    login(browser)
+    books = fetch_books(browser)
+
+    if len(books):
+      break
+    else:
+      print("Login failed! Wrong email or password.")
+      continue
 
   book_highlights = {}
 
