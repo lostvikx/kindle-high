@@ -14,9 +14,9 @@ Extracts all your Amazon Kindle highlights
 - [x] prompt.py argparse is never used, provide bash man
 - [x] Highlights from a specific book (search algo or regex)
 - [x] book search: multi-word search
-- [ ] Replace .json file with a database (sqlite3)
-- [ ] Remove useless highlights on the kindle site
+- [x] Remove useless highlights on the kindle site
 - [x] Add a setup script
+- [ ] Replace .json file with a database (sqlite3)
 
 ## Setup
 
@@ -28,8 +28,7 @@ git clone https://github.com/lostvikx/kindle-high.git
 Run the setup script.
 
 ```bash
-cd kindle-high
-./setup
+cd kindle-high && ./setup
 ```
 
 Selenium requires additional browser drivers. Download them from [here](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/).
@@ -43,18 +42,16 @@ Prints a cool annotation from your kindle highlight. Also, it fetches the highli
 kindle-high
 ```
 
+For help.
+
+```bash
+kindle-high --help
+```
+
 To update the local `highlights.json` file.
 
 ```bash
 kindle-high -u
-# OR
-kindle-high --update-highlights
-```
-
-For further help.
-
-```bash
-kindle-high --help
 ```
 
 ### Bonus usage of ffmpeg (unrelated)
