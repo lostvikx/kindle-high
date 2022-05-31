@@ -17,10 +17,14 @@ def fetch_highlight_to_del(web):
   for high_div in highlight_divs:
     try:
       highlight = high_div.find_element(By.ID, "highlight").text.strip()
-    except Exception as err:
-      print(f"Text highlight error: {err}")
+    except Exception as HighlightErr:
+      try:
+        note = high_div.find_element(By.ID, "note").text.strip()
+      except Exception:
+        print(f"Text highlight error: {HighlightErr}")
       # remove text that has error
-      return high_div
+      continue
+
     if len(highlight.split()) <= 3:
       return high_div
     else:
@@ -87,7 +91,7 @@ def main():
 
   # testing
   def unit_test():
-    wait_payload(browser, books[26], False, 100)
+    wait_payload(browser, books[16], False, 100)
 
     while True:
       high_div = fetch_highlight_to_del(browser)
@@ -101,6 +105,9 @@ def main():
 
     browser.close()
     print("Useless highlights were deleted!")
+    exit()
+
+  # unit_test()
 
   for index, book in enumerate(books):
     is_first = False
